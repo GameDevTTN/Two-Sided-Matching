@@ -5,20 +5,12 @@
  */
 package com.ylo019.main;
 
-import static Main.GenericMain.fetchAll;
 import Main.Observers.Auxiliary.PreferenceType;
-import Main.Observers.OneSidedAlgorithmObserver;
 import Main.Observers.BordaRelated.BordaOrderBias;
 import Main.Observers.BordaRelated.BordaScoreRaw;
 import Main.Observers.BordaRelated.BordaWorstAgentToRank;
 import Main.Observers.BordaRelated.PluralityScoreRaw;
 import Main.Observers.CompareTables;
-import Main.Observers.Envy.EnvyAgentCount;
-import Main.Observers.Envy.EnvyFreeProfilesCount;
-import Main.Observers.Envy.EnvyPairsCounter;
-import Main.Observers.Envy.WeaklyEnvyAgentCount;
-import Main.Observers.Envy.WeaklyEnvyFreeProfilesCount;
-import Main.Observers.Envy.WeaklyEnvyPairsCount;
 import Main.Observers.EquivalentAlgorithm;
 import Main.Observers.LaTeXTablePrinter;
 import Main.Observers.LogWriter;
@@ -38,21 +30,26 @@ import Main.Observers.UtilitiesRelated.ExponentialUtilityRaw;
 import Main.Observers.iResultsCollator;
 import Main.Settings.Configurations;
 import MatchingAlgorithm.Auxiliary.PreferenceProfile;
-import MatchingAlgorithm.DeterministicAlgorithm.AdaptiveBoston;
-import MatchingAlgorithm.DeterministicAlgorithm.HungarianAlgorithmWrapper;
-import MatchingAlgorithm.ProbabilisticSerialRule;
-import MatchingAlgorithm.Proportional;
+import MatchingAlgorithm.Auxiliary.Restrictions.LimitedByAgentProposal;
+import MatchingAlgorithm.Auxiliary.Restrictions.LimitedByItemHeldBy;
+import MatchingAlgorithm.Auxiliary.Restrictions.RestrictionFactoryAdaptor;
+import MatchingAlgorithm.Auxiliary.Restrictions.iRestriction;
+import MatchingAlgorithm.Taxonomy.GenericImplementation;
 import Pair.Pair;
 import UtilityModels.AntiPluralityModel;
-import UtilityModels.ExponentialModel;
 import UtilityModels.PluralityModel;
 import com.ylo019.twosidedmatching.GaleShapley;
+import com.ylo019.twosidedmatching.GeneralisedImmediateAndDeferredAcceptance;
+import com.ylo019.twosidedmatching.NoMemoryQueue;
 import com.ylo019.twosidedmatching.NoMemoryStack;
 import com.ylo019.twosidedmatching.TwoSidedAlgorithmObserver;
+import com.ylo019.twosidedmatching.TwoSidedHungarianWrapper;
+import com.ylo019.twosidedmatching.TwoSidedTaxonomy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import ordinalpreferencegenerator.ICRandom;
+import ordinalpreferencegenerator.Mallows;
 import ordinalpreferencegenerator.iOrdinalIterator;
 
 /**
@@ -126,7 +123,7 @@ public class TwoSidedGenericMain {
     }
     
     private static iOrdinalIterator[] getPreferenceProfiles() {
-        return new iOrdinalIterator[]{new ICRandom(10, 5, 5), new ICRandom(10, 5, 5)}; //no
+        return new iOrdinalIterator[]{new ICRandom(10000, 20, 20), new ICRandom(10000, 20, 20), new Mallows(10000, 30, 30, 0.4f), new Mallows(10000, 30, 30, 0.4f)}; //no
 //        return new iOrdinalIterator[]{new IC(3, 3), new ICRandom(100000, 4, 4), new ICRandom(100000, 5, 5), new ICRandom(50000, 6, 6), new ICRandom(50000, 7, 7)};
 //        return new iOrdinalIterator[]{new IC(3, 3), new ICRandom(10000, 4, 4), new ICRandom(10000, 5, 5)}; //no
 //        return new iOrdinalIterator[]{new ICRandom(50000, 10), new ICRandom(50000, 15), new ICRandom(50000, 20), new ICRandom(50000, 25), new ICRandom(50000, 30), new ICRandom(50000, 35), new ICRandom(50000, 40), new ICRandom(50000, 45), new ICRandom(50000, 50)};
@@ -147,7 +144,35 @@ public class TwoSidedGenericMain {
     private static TwoSidedAlgorithmObserver[] getAlgorithms() {
         ArrayList<TwoSidedAlgorithmObserver> out = new ArrayList<>();
         out.add(new TwoSidedAlgorithmObserver(new NoMemoryStack()));
+        out.add(new TwoSidedAlgorithmObserver(new NoMemoryQueue()));
         out.add(new TwoSidedAlgorithmObserver(new GaleShapley()));
+        out.add(new TwoSidedAlgorithmObserver(new GeneralisedImmediateAndDeferredAcceptance()));
+        out.add(new TwoSidedAlgorithmObserver(new GeneralisedImmediateAndDeferredAcceptance(1)));
+        out.add(new TwoSidedAlgorithmObserver(new GeneralisedImmediateAndDeferredAcceptance(2)));
+        out.add(new TwoSidedAlgorithmObserver(new GeneralisedImmediateAndDeferredAcceptance(30)));
+        for (int i = 0; i < 10; i++) {
+            final int j = i;
+            out.add(new TwoSidedAlgorithmObserver(new GaleShapley(new RestrictionFactoryAdaptor() {
+
+                @Override
+                public iRestriction[] getRestrictions(int agent, int item) {
+                    return new iRestriction[]{new LimitedByAgentProposal(agent, j)};
+                }
+            })));
+            out.add(new TwoSidedAlgorithmObserver(new GaleShapley(new RestrictionFactoryAdaptor() {
+
+                @Override
+                public iRestriction[] getRestrictions(int agent, int item) {
+                    return new iRestriction[]{new LimitedByItemHeldBy(item, j)};
+                }
+            })));
+        }
+        boolean fixedOrder = true;
+        out.add(new TwoSidedAlgorithmObserver(new TwoSidedTaxonomy(new GenericImplementation(true, true, true, false, false), PreferenceType.TWO_SIDED_PROPOSER, fixedOrder)));
+        out.add(new TwoSidedAlgorithmObserver(new TwoSidedTaxonomy(new GenericImplementation(true, true, true, false, false), PreferenceType.TWO_SIDED_PROPOSEE, fixedOrder)));
+        out.add(new TwoSidedAlgorithmObserver(new TwoSidedTaxonomy(new GenericImplementation(true, true, false, false, false), PreferenceType.TWO_SIDED_PROPOSER, fixedOrder)));
+        out.add(new TwoSidedAlgorithmObserver(new TwoSidedTaxonomy(new GenericImplementation(true, true, false, false, false), PreferenceType.TWO_SIDED_PROPOSEE, fixedOrder)));
+        out.add(new TwoSidedAlgorithmObserver(new TwoSidedHungarianWrapper()));
         //boolean fixOrder = true; always fixing order
         TwoSidedAlgorithmObserver[] arr = new TwoSidedAlgorithmObserver[0];
         arr = out.toArray(arr);
@@ -164,15 +189,13 @@ public class TwoSidedGenericMain {
             new ResultCollatorWrapper(new CustomUtilityModelRaw(new AntiPluralityModel()), PreferenceType.TWO_SIDED_PROPOSEE)}));
         for (double d : getExponentialParams()) {
             list.add(new ResultCollatorWrapper(new ExponentialUtilityRaw(d), PreferenceType.TWO_SIDED_PROPOSER));
+            list.add(new ResultCollatorWrapper(new ExponentialUtilityRaw(d), PreferenceType.TWO_SIDED_PROPOSEE));
+            list.add(new ResultCollatorWrapper(new ExponentialUtilityPercentageOfMax(d), PreferenceType.TWO_SIDED_PROPOSER));
             list.add(new ResultCollatorWrapper(new ExponentialUtilityPercentageOfMax(d), PreferenceType.TWO_SIDED_PROPOSEE));
         }
         iResultsCollator[] arg1 = new iResultsCollator[]{new BordaScoreRaw(), new BordaWorstAgentToRank(), new BordaOrderBias(), new PluralityScoreRaw(),
-            new EnvyAgentCount(), new EnvyFreeProfilesCount(), new EnvyPairsCounter(),
-            new WeaklyEnvyAgentCount(), new WeaklyEnvyFreeProfilesCount(), new WeaklyEnvyPairsCount(),
             new SDProportionalSummary(), new SDProportionalityChecker(), new SDProportionalityAgentCount()};
         iResultsCollator[] arg2 = new iResultsCollator[]{new BordaScoreRaw(), new BordaWorstAgentToRank(), new BordaOrderBias(), new PluralityScoreRaw(),
-            new EnvyAgentCount(), new EnvyFreeProfilesCount(), new EnvyPairsCounter(),
-            new WeaklyEnvyAgentCount(), new WeaklyEnvyFreeProfilesCount(), new WeaklyEnvyPairsCount(),
             new SDProportionalSummary(), new SDProportionalityChecker(), new SDProportionalityAgentCount()};
         List<iResultsCollator> twoSided = new ArrayList<>();
         for (iResultsCollator arg : arg1) {
@@ -189,7 +212,8 @@ public class TwoSidedGenericMain {
     }
     
     private static double[] getExponentialParams() {
-        return new double[]{-1.0, -0.75, -0.5, -0.25, 0.0, 0.5, 1.0, 1.5, 2.0};
+        //return new double[]{-1.0, -0.75, -0.5, -0.25, 0.0, 0.5, 1.0, 1.5, 2.0};
+        return new double[]{0.0};
     }
     
 }

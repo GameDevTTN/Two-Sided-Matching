@@ -3,13 +3,25 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/SymmetrisedTwoSidedAlgorithm.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/galeshapley/Female.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/TwoSidedTaxonomy.java</file>
             <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/GaleShapley.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/TwoSidedHungarianWrapper.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/schoolchoice/Student.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/galeshapley/GaleShapley.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/NoMemoryQueue.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/iTwoSidedAlgorithm.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/NoMemoryStack.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/GenericNoMemoryTwoSided.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/schoolchoiceobjects/iProposable.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/SymmetrisedTwoSidedAlgorithm.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/schoolchoice/School.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/galeshapley/Male.java</file>
             <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/main/TwoSidedGenericMain.java</file>
             <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/TwoSidedAlgorithmObserver.java</file>
             <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/TwoSidedMatching.java</file>
-            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/iTwoSidedAlgorithm.java</file>
-            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/NoMemoryStack.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/schoolchoiceobjects/iAgent.java</file>
+            <file>file:/C:/Users/ylo019/Documents/NetBeansProjects/TwoSidedMatching/src/com/ylo019/twosidedmatching/schoolchoiceobjects/iRejectable.java</file>
         </group>
     </open-files>
 </project-private>

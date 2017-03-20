@@ -5,14 +5,7 @@
  */
 package com.ylo019.twosidedmatching;
 
-import MatchingAlgorithm.Auxiliary.Permutation;
 import MatchingAlgorithm.Auxiliary.PreferenceProfile;
-import MatchingAlgorithm.Auxiliary.Restrictions.*;
-import MatchingAlgorithm.Auxiliary.iIterator;
-import MatchingAlgorithm.Auxiliary.iProfileIterator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import ordinalpreferencegenerator.*;
 
 /**

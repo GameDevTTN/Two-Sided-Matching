@@ -9,16 +9,16 @@ package com.ylo019.twosidedmatching;
  *
  * @author ylo019
  */
-public class NoMemoryStack extends GenericNoMemoryTwoSided {
-    
+public class NoMemoryQueue extends GenericNoMemoryTwoSided {
+
     @Override
     protected boolean isStack() {
-        return true;
+        return false;
     }
-    
+
     @Override
     public String getName() {
-        return "No Memory Stack";
+        return "No Memory Queue";
     }
     
 }

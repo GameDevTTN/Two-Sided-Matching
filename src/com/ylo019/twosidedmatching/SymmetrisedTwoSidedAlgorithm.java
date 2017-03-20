@@ -27,7 +27,7 @@ public abstract class SymmetrisedTwoSidedAlgorithm implements iTwoSidedAlgorithm
         int proposeeSize = proposee.size();
         ProbabilityMatrix ipm = new ProbabilityMatrix(proposerSize, proposeeSize);
         Permutation[] priority = null;
-        boolean fixOrder = false;
+        boolean fixOrder = true;
         if (fixOrder) {
             priority = new Permutation[1];
             int[] order = new int[proposerSize];
