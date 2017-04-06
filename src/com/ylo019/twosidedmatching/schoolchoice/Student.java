@@ -5,6 +5,7 @@
  */
 package com.ylo019.twosidedmatching.schoolchoice;
 
+import UtilityModels.iUtilitiesModel;
 import com.ylo019.twosidedmatching.schoolchoiceobjects.Proposable;
 import com.ylo019.twosidedmatching.schoolchoiceobjects.iRejectable;
 
@@ -62,5 +63,23 @@ public class Student extends Proposable {
     public String getPartners() {
         return school.getName();
     }
+
+    @Override
+    public double getUtility(iUtilitiesModel ium) {
+        return (school == null ? 0 : ium.getUtilities(rejectables.size())[rejectables.indexOf(school)]);
+    }
     
+    @Override
+    public int howManyBlockingPairs() {
+        int count = 0;
+        for (iRejectable r : rejectables) {
+            if (r == school) {
+                return count;
+            }
+            if (r.isMyEnvyJustified(this)) {
+                count++;
+            }
+        }
+        return count;
+    }
 }

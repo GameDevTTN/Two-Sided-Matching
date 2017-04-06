@@ -5,6 +5,7 @@
  */
 package com.ylo019.twosidedmatching.schoolchoice;
 
+import UtilityModels.iUtilitiesModel;
 import com.ylo019.twosidedmatching.schoolchoiceobjects.Rejectable;
 import com.ylo019.twosidedmatching.schoolchoiceobjects.iProposable;
 import java.util.ArrayList;
@@ -27,12 +28,12 @@ public abstract class School extends Rejectable {
 
     @Override
     public boolean isFree() {
-        return capacity == enrolled.size();
+        return capacity > enrolled.size();
     }
 
     @Override
     public boolean isFreeSinceRound() {
-        return capacity == enrolled.size();
+        return capacity > enrolled.size();
     }
 
     @Override
@@ -52,6 +53,43 @@ public abstract class School extends Rejectable {
             out += p.getName() + ", ";
         }
         return out.substring(0, out.length() - 2);
+    }
+    
+    @Override
+    public double getUtility(iUtilitiesModel ium) {
+        double sum = 0.0;
+        for (iProposable p : enrolled) {
+            sum += ium.getUtilities(proposable.size())[proposable.indexOf(p)];
+        }
+        return sum;
+    }
+    
+    @Override
+    public double getNashUtility(iUtilitiesModel ium) {
+        double product = 1.0;
+        for (iProposable p : enrolled) {
+            product *= ium.getUtilities(proposable.size())[proposable.indexOf(p)];
+        }
+        return product;       
+    }
+    
+    @Override
+    public double getMinUtility(iUtilitiesModel ium) {
+        double min = Double.POSITIVE_INFINITY;
+        for (iProposable p : enrolled) {
+            min = Math.min(min, ium.getUtilities(proposable.size())[proposable.indexOf(p)]);
+        }
+        return min/(proposable.size() - 1);
+    }
+    
+    @Override
+    public boolean isMyEnvyJustified(iProposable proposer) {
+        for (iProposable p : enrolled) {
+            if (proposable.indexOf(proposer) < proposable.indexOf(p)) {
+                return true;
+            }
+        }
+        return false;
     }
     
 }

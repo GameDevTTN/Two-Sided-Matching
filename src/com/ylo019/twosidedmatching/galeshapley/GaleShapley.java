@@ -5,6 +5,8 @@
  */
 package com.ylo019.twosidedmatching.galeshapley;
 
+import UtilityModels.ExponentialModel;
+
 /**
  *
  * @author ylo019
@@ -51,9 +53,15 @@ public class GaleShapley {
         for (Male m : males) {
             m.makeProposal();
         }
+        double util = 0;
         for (Male m : males) {
             System.out.println(m.getName() + " is engaged to " + m.getPartners());
+            util += (m.getUtility(new ExponentialModel(0.0))/females.length);
         }
+        for (Female f : females) {
+            util += (f.getUtility(new ExponentialModel(0.0))/males.length);
+        }
+        System.out.println("Average Utility: " + util/(males.length + females.length));
     }
     
 }

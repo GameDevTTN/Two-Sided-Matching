@@ -13,4 +13,6 @@ public interface iRejectable extends iAgent {
     
     public void receivesProposal(iProposable proposer);
     
+    public boolean isMyEnvyJustified(iProposable proposer);
+    
 }

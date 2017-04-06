@@ -5,6 +5,8 @@
  */
 package com.ylo019.twosidedmatching.schoolchoiceobjects;
 
+import UtilityModels.iUtilitiesModel;
+
 /**
  *
  * @author ylo019
@@ -16,5 +18,9 @@ public interface iAgent {
     public void newRound();
     public String getName();
     public String getPartners();
+    
+    public double getUtility(iUtilitiesModel ium);
+    public double getNashUtility(iUtilitiesModel ium);
+    public double getMinUtility(iUtilitiesModel ium);
     
 }

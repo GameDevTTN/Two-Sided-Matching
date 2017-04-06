@@ -5,6 +5,7 @@
  */
 package com.ylo019.twosidedmatching.schoolchoiceobjects;
 
+import UtilityModels.iUtilitiesModel;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -22,6 +23,16 @@ public abstract class Proposable implements iProposable {
     public void setPreference(iRejectable[] rejectables) {
         this.rejectables.addAll(Arrays.asList(rejectables));
         iterator = this.rejectables.listIterator();
+    }
+    
+    @Override
+    public double getNashUtility(iUtilitiesModel ium) {
+        return getUtility(ium);
+    }
+        
+    @Override
+    public double getMinUtility(iUtilitiesModel ium) {
+        return getUtility(ium)/(rejectables.size() - 1);
     }
     
 }

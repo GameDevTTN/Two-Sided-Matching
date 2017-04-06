@@ -5,6 +5,7 @@
  */
 package com.ylo019.twosidedmatching.galeshapley;
 
+import UtilityModels.iUtilitiesModel;
 import com.ylo019.twosidedmatching.schoolchoiceobjects.Proposable;
 import com.ylo019.twosidedmatching.schoolchoiceobjects.iRejectable;
 
@@ -63,6 +64,25 @@ public class Male extends Proposable {
     @Override
     public String getPartners() {
         return (partner == null ? "null" : partner.getName());
+    }
+
+    @Override
+    public double getUtility(iUtilitiesModel ium) {
+        return (partner == null ? 0 : ium.getUtilities(rejectables.size())[rejectables.indexOf(partner)]);
+    }
+
+    @Override
+    public int howManyBlockingPairs() {
+        int count = 0;
+        for (iRejectable r : rejectables) {
+            if (r == partner) {
+                return count;
+            }
+            if (r.isMyEnvyJustified(this)) {
+                count++;
+            }
+        }
+        return count;
     }
     
 }

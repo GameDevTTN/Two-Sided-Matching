@@ -14,5 +14,6 @@ public interface iProposable extends iAgent {
     public void makeProposal();
     public void isEngaged(iRejectable rejectable);
     public void isRejected(iRejectable rejectable);
+    public int howManyBlockingPairs();
     
 }
