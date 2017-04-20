@@ -44,7 +44,7 @@ public class BinarySearchEgalitarian {
             double[] out = new HungarianAlgorithmWrapper().solve(proposer, proposee, capacity, new TopKChoiceModel(pivot, proposee.size()), true, (isBoth ? DIRECTION.BOTH : DIRECTION.LEFT));
             //System.out.print("PIVOT: " + pivot + " " + Arrays.toString(out));
             if (lastSucc == null || out[getIndexOfOutput(isBoth ? DIRECTION.BOTH : DIRECTION.LEFT)] > 
-                    1.0 - (pivot - 1.0)/(proposee.size() - 1) - 0.000001f) { //0.00001f = error rate
+                    1.0 - (pivot - 1.0)/(proposee.size() - 1) - 0.000000001f) { //0.00000001f = error rate
                 lastSucc = out;
                 minSucc = pivot;
                 //System.out.println("SUCC");
@@ -66,7 +66,7 @@ public class BinarySearchEgalitarian {
             double[] out = new HungarianAlgorithmWrapper().solve(proposer, proposee, capacity, new TopKChoiceModel(pivot, proposer.size()), true, (isBoth ? DIRECTION.BOTH : DIRECTION.RIGHT));
             //System.out.print("PIVOT: " + pivot + " " + Arrays.toString(out));
             if (lastSucc == null || out[getIndexOfOutput(isBoth ? DIRECTION.BOTH : DIRECTION.RIGHT)] > 
-                    1.0 - (pivot - 1.0)/(proposer.size() - 1) - 0.000001f) { //0.00001f = error rate
+                    1.0 - (pivot - 1.0)/(proposer.size() - 1) - 0.000000001f) { //0.00000001f = error rate
                 lastSucc = out;
                 minSucc = pivot;
                 //System.out.println("SUCC");

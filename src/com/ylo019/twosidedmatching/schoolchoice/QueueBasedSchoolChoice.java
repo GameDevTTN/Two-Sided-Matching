@@ -30,17 +30,17 @@ import ordinalpreferencegenerator.iOrdinalIterator;
 public class QueueBasedSchoolChoice {
     
     public static void main(String[] args) {
-        Settings.PATH = "FINALDATA/060417/SchoolChoice/SHORT1/";
+        Settings.PATH = "MACTEST/200417/SchoolChoice/SHORT1/";
         Configurations.getConfigurations().setOutput(new MessageType[]{/*MessageType.PREFERENCE, /*MessageType.DETAILS,*/ MessageType.PRINT});
         IO.getConsole();
         Configurations.getConfigurations().init();
         int minSize = 100;
-        int maxSize = 3000;
+        int maxSize = 100;
         int increment = 100;
         float minMallows = 0.1f;
         float maxMallows = 1.0f;
-        int mallowsSplit = 9;
-        int runs = 1000;
+        int mallowsSplit = 1;
+        int runs = 10;
         int currentSize = minSize;
         //print the heading once
         PostBox.broadcast(MessageType.PRINT, "SUMMARY");
