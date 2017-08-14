@@ -21,6 +21,10 @@ public class Male extends Proposable {
     public Male(String name) {
         this.name = name;
     }
+    
+    public int[] getRanks() {
+    	return null;
+    }
 
     @Override
     public void makeProposal() {

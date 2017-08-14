@@ -6,6 +6,9 @@
 package com.ylo019.twosidedmatching.schoolchoice;
 
 import UtilityModels.iUtilitiesModel;
+
+import java.util.Arrays;
+
 import com.ylo019.twosidedmatching.schoolchoiceobjects.Proposable;
 import com.ylo019.twosidedmatching.schoolchoiceobjects.iRejectable;
 
@@ -62,6 +65,12 @@ public class Student extends Proposable {
     @Override
     public String getPartners() {
         return school.getName();
+    }
+    
+    public int[] getRanks() {
+    	int[] ranks = new int[1];
+		ranks[0] = rejectables.indexOf(school) + 1;
+		return ranks;
     }
 
     @Override

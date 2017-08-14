@@ -130,9 +130,9 @@ public class BinarySearchEgalitarian {
             case LEFT:
                 return 1;
             case RIGHT:
-                return 4;
+                return 5;
             case BOTH:
-                return 7;
+                return 9;
                 default:
                 return -1;
         }

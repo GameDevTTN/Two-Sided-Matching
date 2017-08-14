@@ -19,6 +19,8 @@ public interface iAgent {
     public String getName();
     public String getPartners();
     
+    public int[] getRanks();
+    
     public double getUtility(iUtilitiesModel ium);
     public double getNashUtility(iUtilitiesModel ium);
     public double getMinUtility(iUtilitiesModel ium);

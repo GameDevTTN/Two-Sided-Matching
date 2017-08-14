@@ -9,6 +9,7 @@ import UtilityModels.iUtilitiesModel;
 import com.ylo019.twosidedmatching.schoolchoiceobjects.Rejectable;
 import com.ylo019.twosidedmatching.schoolchoiceobjects.iProposable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,6 +54,14 @@ public abstract class School extends Rejectable {
             out += p.getName() + ", ";
         }
         return out.substring(0, out.length() - 2);
+    }
+    
+    public int[] getRanks() {
+    	int[] ranks = new int[enrolled.size()];
+    	for (int i = 0; i < ranks.length; i++) {
+    		ranks[i] = proposable.indexOf(enrolled.get(i)) + 1;
+    	}
+    	return ranks;
     }
     
     @Override

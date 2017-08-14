@@ -34,7 +34,9 @@ public class HungarianAlgorithmWrapper {
             totalCapacity += c;
         }
         double[] weight = model.getUtilities(proposer.size());
+        //System.out.println(Arrays.toString(weight));
         double[] scWeight = model.getUtilities(proposee.size());
+        //System.out.println(Arrays.toString(scWeight));
         double[][] weights = new double[proposer.size()][totalCapacity];
         int[] buckets = new int[totalCapacity];
         int index = 0;
@@ -78,66 +80,88 @@ public class HungarianAlgorithmWrapper {
             }
         }
 //        System.out.println(Arrays.toString(weight));
-        //System.out.println(Arrays.deepToString(weights));
+//        System.out.println(Arrays.deepToString(weights));
         int[] result = new HungarianAlgorithm(weights).execute();
         
         //System.out.println(Arrays.toString(result));
         
-        double[] borda = ExponentialModel.BORDA.getUtilities(proposer.size());
-        double[] scBorda = ExponentialModel.BORDA.getUtilities(proposee.size());
-        for (int i = 0; i < result.length; i++)
-            PostBox.broadcast(MessageType.DETAILS, "Student " + (i + 1) + " is enrolled in " + "School " + (buckets[result[i] - 1] + 1));
-        double leftUtil = 0.0;
-        double leftEgal = Double.POSITIVE_INFINITY;
-        double leftNash = 1.0;
-        double rightUtil = 0.0;
-        double rightEgal = Double.POSITIVE_INFINITY;
-        double rightNash = 1.0;
-        for (int i = 0; i < result.length; i++) {
-            int[] proposerPref = proposers[i].getArray();
-            for (int j = 0; j < proposerPref.length; j++) {
-                if (proposerPref[j] == buckets[result[i] - 1] + 1) {
-                    leftUtil += scBorda[j]/(proposee.size() - 1);
-                    leftEgal = Math.min(leftEgal, scBorda[j]/(proposee.size() - 1));
-                    leftNash *= scBorda[j];
-                }
-            }
-            int[] proposeePref = proposees[buckets[result[i] - 1]].getArray();
-            for (int j = 0; j < proposeePref.length; j++) {
-                if (proposeePref[j] == (i + 1)) {
-                    rightUtil += borda[j]/(proposer.size() - 1);
-                    rightEgal = Math.min(rightEgal, borda[j]/(proposer.size() - 1));
-                    rightNash *= borda[j];
-                }
-            }
-        }
+//        double[] borda = ExponentialModel.BORDA.getUtilities(proposer.size());
+//        double[] scBorda = ExponentialModel.BORDA.getUtilities(proposee.size());
+//        for (int i = 0; i < result.length; i++)
+//            PostBox.broadcast(MessageType.DETAILS, "Student " + (i + 1) + " is enrolled in " + "School " + (buckets[result[i] - 1] + 1));
+//        double leftUtil = 0.0;
+//        double leftEgal = Double.POSITIVE_INFINITY;
+//        double leftNash = 1.0;
+//        double leftPlur = 0.0;
+//        double rightUtil = 0.0;
+//        double rightEgal = Double.POSITIVE_INFINITY;
+//        double rightNash = 1.0;
+//        double rightPlur = 0.0;
+//        for (int i = 0; i < result.length; i++) {
+//            int[] proposerPref = proposers[i].getArray();
+//            for (int j = 0; j < proposerPref.length; j++) {
+//                if (proposerPref[j] == buckets[result[i] - 1] + 1) {
+//                    leftUtil += scBorda[j]/(proposee.size() - 1);
+//                    leftEgal = Math.min(leftEgal, scBorda[j]/(proposee.size() - 1));
+//                    leftNash *= scBorda[j];
+//                    if (j == 0) {
+//                    	leftPlur++;
+//                    }
+//                }
+//            }
+//            int[] proposeePref = proposees[buckets[result[i] - 1]].getArray();
+//            for (int j = 0; j < proposeePref.length; j++) {
+//                if (proposeePref[j] == (i + 1)) {
+//                    rightUtil += borda[j]/(proposer.size() - 1);
+//                    rightEgal = Math.min(rightEgal, borda[j]/(proposer.size() - 1));
+//                    rightNash *= borda[j];
+//                    if (j == 0) {
+//                    	rightPlur++;
+//                    }
+//                }
+//            }
+//        }
         int blockingPair = 0;
         for (int proposerIndex = 0; proposerIndex < proposer.size(); proposerIndex++) {
             int currentMatch = buckets[result[proposerIndex] - 1] + 1; //make it 1 based
             for (int proposerPrefList : proposers[proposerIndex].getArray()) {
                 if (proposerPrefList == currentMatch)
                     break;
-                for (int proposeePrefList : proposees[currentMatch - 1].getArray())
-                    if (proposeePrefList - 1 == proposerIndex)
-                        blockingPair++;
+                //currentMatchCapacity is misnamed - it should be targetSchoolCapacity
+                int currentMatchCapacity = capacity[proposerPrefList - 1];
+                for (int proposeePrefList : proposees[proposerPrefList - 1].getArray()) {
+                    //if proposeePrefList is enrolled in proposerPrefList!!, then reduce capacity
+                	//why am I so stupid... spent whole day on that stupid bug.
+                	if (buckets[result[proposeePrefList - 1] - 1] + 1 == proposerPrefList)
+                		currentMatchCapacity--;
+                	//if capacity == 0, then there is no justified envy
+                	if (currentMatchCapacity <= 0)
+                		break;
+                	//if proposeePrefList == proposerIndex, we have justified envy
+                	if (proposeePrefList - 1 == proposerIndex)
+                		blockingPair++;
+                }
             }
+            //System.out.println(blockingPair);
         }
-        /*
-        int count = 0;
-        for (iRejectable r : rejectables) {
-            if (r == school) {
-                return count;
-            }
-            if (r.isMyEnvyJustified(this)) {
-                count++;
-            }
+//        double[] out1 = new double[]{leftUtil/proposer.size(), leftEgal, Math.pow(leftNash, 1.0/proposer.size()), leftPlur/proposer.size(),
+//            rightUtil/proposer.size(), rightEgal, Math.pow(rightNash, 1.0/proposer.size())/proposer.size(), rightPlur/proposer.size(),
+//            (leftUtil + rightUtil)/(proposer.size() * 2), Math.min(leftEgal, rightEgal), Math.pow(leftNash * rightNash, 1.0/(proposer.size() * 2)), (leftPlur + rightPlur)/(proposer.size() * 2),
+//            (double)blockingPair/(proposer.size() * proposee.size())};
+        int[] unbucketedResult = new int[result.length];
+        for (int i = 0; i < result.length; i++) {
+        	unbucketedResult[i] = buckets[result[i] - 1] + 1;
         }
-        return count;
-        */
-        return new double[]{leftUtil/proposer.size(), leftEgal, Math.pow(leftNash, 1.0/proposer.size()),
-            rightUtil/proposer.size(), rightEgal, Math.pow(rightNash, 1.0/proposer.size())/proposer.size(),
-            (leftUtil + rightUtil)/(proposer.size() * 2), Math.min(leftEgal, rightEgal), Math.pow(leftNash * rightNash, 1.0/(proposer.size() * 2)),
-            (double)blockingPair/(proposer.size() * proposee.size())}; //not support blocking pairs
+        double[] out2 = Helper.ranksToScore(Helper.matchingToRanks(unbucketedResult, proposer), Helper.invertedMatchingToRanks(unbucketedResult, proposee, proposee.size()), (double)blockingPair/(proposer.size() * proposee.size()));
+//        	for (int i = 0; i < out1.length; i++) {
+//        		if (Math.abs(out1[i] - out2[i]) > 0.00001) {
+//        			System.out.println(Arrays.toString(out1));
+//        			System.out.println(Arrays.toString(out2));
+//        			break;
+//        		}
+//        	}
+        //System.out.println(Arrays.toString(result));
+        return out2;
     }
     
 }

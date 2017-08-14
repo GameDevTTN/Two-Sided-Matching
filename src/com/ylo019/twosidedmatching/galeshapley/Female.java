@@ -25,6 +25,10 @@ public class Female extends Rejectable {
         this.name = name;
     }
     
+    public int[] getRanks() {
+    	return null;
+    }
+    
     @Override
     public void setPreference(iProposable[] males) {
         super.setPreference(males);
